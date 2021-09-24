@@ -100,7 +100,7 @@ def display_terraform_step_error(step, retcode, stdout, stderr):
 
 
 def extract_cgid_from_dir_name(dir_name):
-    match = re.match(r"(?:.*)\_(cgid(?:[a-z0-9]){10})", dir_name)
+    match = re.match(r"(?:.*)\_(cgid-(?:[a-z0-9]))", dir_name)
     if match:
         return match.group(1)
     return None
@@ -116,12 +116,18 @@ def find_scenario_dir(scenarios_dir, dir_name):
 def find_scenario_instance_dir(base_dir, scenario_name):
     for dir_path in dirs_at_location(base_dir):
         dir_match = re.findall(
-            r"(.*)\_cgid(?:[a-z0-9]){10}$", os.path.basename(dir_path)
+            r"(.*)\_cgid-", os.path.basename(dir_path)
         )
         if dir_match and dir_match[0] == scenario_name:
             return dir_path
     return None
 
+def generate_cgid_using_username(user_name):
+    cgid = f"cgid-{user_name.replace(' ','')}-"
+
+    return cgid + "".join(
+        random.choice(string.ascii_lowercase + string.digits) for x in range(3)
+    )
 
 def generate_cgid():
     return "cgid" + "".join(
@@ -241,4 +247,5 @@ def normalize_scenario_name(scenario_name_or_path):
         relative_path = os.path.sep.join(fully_split_path[index : index + 2])
         return os.path.basename(relative_path.strip(os.path.sep))
     else:
-        return os.path.basename(scenario_name_or_path.strip(os.path.sep))
+        return os.path.basename(scenario_name_or_path.strip(os.path.sep))      
+

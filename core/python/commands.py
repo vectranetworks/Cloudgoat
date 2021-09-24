@@ -17,6 +17,7 @@ from core.python.utils import (
     find_scenario_dir,
     find_scenario_instance_dir,
     generate_cgid,
+    generate_cgid_using_username,
     ip_address_or_range_is_valid,
     load_and_validate_whitelist,
     load_data_from_yaml_file,
@@ -99,6 +100,9 @@ class CloudGoat:
                     profile = load_data_from_yaml_file(
                         self.config_path, "default-profile"
                     )
+                    user_name = load_data_from_yaml_file(
+                        self.config_path, "user-name"
+                    )
                 if not profile:
                     print(
                         f"The {command[0]} command requires the use of the --profile"
@@ -121,7 +125,7 @@ class CloudGoat:
                 return self.configure_argcomplete()
 
         elif command[0] == "create":
-            return self.create_scenario(command[1], profile)
+            return self.create_scenario(command[1], profile, user_name)
 
         elif command[0] == "destroy":
             if command[1] == "all":
@@ -196,8 +200,12 @@ class CloudGoat:
             default_profile = load_data_from_yaml_file(
                 self.config_path, "default-profile"
             )
+            user_name = load_data_from_yaml_file(
+                self.config_path, "user-name"
+            )
             if default_profile:
                 print(f'It specifies a default profile name of "{default_profile}".')
+                print(f'And user name of "{user_name}".')
             else:
                 print(f"It does not contain a default profile name.")
             create_config_file_now = input(
@@ -213,11 +221,21 @@ class CloudGoat:
                 f"Enter the name of your default AWS profile: "
             ).strip()
 
+            user_name = input(
+                f"Enter your first and last name: "
+            ).strip()
+
             if default_profile:
                 create_or_update_yaml_file(
                     self.config_path, {"default-profile": default_profile}
                 )
+
+                create_or_update_yaml_file(
+                    self.config_path, {"user-name": user_name}
+                )
+
                 print(f'A default profile name of "{default_profile}" has been saved.')
+                print(f'A user name of "{user_name}" has been saved.')
                 break
             else:
                 print(f"Enter your default profile's name, or hit ctrl-c to exit.")
@@ -314,7 +332,7 @@ class CloudGoat:
                     print(f"Whitelisted IP addresses:\n    " + "\n    ".join(whitelist))
             return whitelist
 
-    def create_scenario(self, scenario_name_or_path, profile):
+    def create_scenario(self, scenario_name_or_path, profile, user_name):
         scenario_name = normalize_scenario_name(scenario_name_or_path)
         scenario_dir = os.path.join(self.scenarios_dir, scenario_name)
 
@@ -356,7 +374,7 @@ class CloudGoat:
                 f"\n*************************************************************************************************\n"
             )
         else:
-            cgid = generate_cgid()
+            cgid = generate_cgid_using_username(user_name)
             instance_path = os.path.join(
                 self.base_dir, f"{scenario_name}_{cgid}"
             )
@@ -752,3 +770,4 @@ class CloudGoat:
             print(f"\n[cloudgoat] terraform show completed with no error code.")
 
         return
+
