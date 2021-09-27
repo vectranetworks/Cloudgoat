@@ -222,7 +222,7 @@ class CloudGoat:
             ).strip()
 
             user_name = input(
-                f"Enter your first and last name: "
+                f"Enter your last name: "
             ).strip()
 
             if default_profile:
@@ -407,7 +407,7 @@ class CloudGoat:
             return
         else:
             print(f"\n[cloudgoat] terraform init completed with no error code.")
-        cgid = instance_path.split('/')[-1]
+        cgid = instance_path.split('/')[-1].split('_')[-1]
         plan_retcode, plan_stdout, plan_stderr = terraform.plan(
             capture_output=False,
             var={
