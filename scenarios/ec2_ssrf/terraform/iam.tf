@@ -1,6 +1,7 @@
 #IAM Users
 resource "aws_iam_user" "cg-solus" {
   name = "solus-${var.cgid}"
+  force_destroy = true
   tags = {
     Name = "cg-solus-${var.cgid}"
     Stack = "${var.stack-name}"
@@ -12,6 +13,7 @@ resource "aws_iam_access_key" "cg-solus" {
 }
 resource "aws_iam_user" "cg-wrex" {
   name = "wrex-${var.cgid}"
+  force_destroy = true
   tags = {
     Name = "cg-wrex-${var.cgid}"
     Stack = "${var.stack-name}"
@@ -23,6 +25,7 @@ resource "aws_iam_access_key" "cg-wrex" {
 }
 resource "aws_iam_user" "cg-shepard" {
   name = "shepard-${var.cgid}"
+  force_destroy = true
   tags = {
     Name = "cg-shepard-${var.cgid}"
     Stack = "${var.stack-name}"
