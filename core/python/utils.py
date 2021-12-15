@@ -100,7 +100,7 @@ def display_terraform_step_error(step, retcode, stdout, stderr):
 
 
 def extract_cgid_from_dir_name(dir_name):
-    match = re.match(r"(?:.*)\_(cgid-(?:[a-z0-9]))", dir_name)
+    match = re.match(r"(?:.*)\_(cgid-(?:[A-Za-z0-9]))", dir_name)
     if match:
         return match.group(1)
     return None
