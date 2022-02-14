@@ -166,6 +166,18 @@ Alternatively, the attacker may explore SSM parameters and find SSH keys to an E
 
 [Visit Scenario Page.](scenarios/codebuild_secrets/README.md)
 
+### cicd (Medium / Moderate)
+
+`$ ./cloudgoat.py create cicd`
+
+FooCorp is a company exposing a public-facing API. Customers of FooCorp submit sensitive data to the API every minute. The API is implemented as a Lambda function, exposed through an API Gateway. Because FooCorp implements DevOps, it has a continuous deployment pipeline automatically deploying new versions of their Lambda function from source code to production in under a few minutes.
+
+Your goal: steal the sensitive data submitted by FooCorp customers!
+
+Contributed by Datadog.
+
+[Visit Scenario Page.](scenarios/cicd/README.md)
+
 ### ecs_efs_attack (Large / Hard)
 
 `$ ./cloudgoat.py create ecs_efs_attack`
